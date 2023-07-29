@@ -6,12 +6,14 @@
  * @array: array to sort
  * @low: start of the partition to sort
  * @high: end of the partition to sort
+ * @size: size of the array
  * Return: index i
  */
-size_t l_partition(int *array, size_t low, size_t high)
+size_t l_partition(int *array, size_t low, size_t high, size_t size)
 {
 	size_t i = low, j;
-	int piv = array[high], temp;
+	int piv = array[high];
+	int temp;
 
 	for (j = low; j < high; j++)
 	{
@@ -22,15 +24,18 @@ size_t l_partition(int *array, size_t low, size_t high)
 				temp = array[i];
 				array[i] = array[j];
 				array[j] = temp;
-				print_array(array, high + 1);
+				print_array(array, size);
 			}
 			i++;
 		}
 	}
-	temp = array[i];
-	array[i] = array[high];
-	array[high] = temp;
-	print_array(array, high + 1);
+	if (array[i] != array[high])
+	{
+		temp = array[i];
+		array[i] = array[high];
+		array[high] = temp;
+		print_array(array, size);
+	}
 	return (i);
 }
 
@@ -41,18 +46,20 @@ size_t l_partition(int *array, size_t low, size_t high)
  * @array: array to sort
  * @low: start of the partition to sort
  * @high: end of the partition to sort
+ * @size: size of array
  * Return: nothing
  */
-void quick_recursive(int *array, size_t low, size_t high)
+void quick_recursive(int *array, size_t low, size_t high, size_t size)
 {
 	size_t piv;
+
 	if (low < high)
 	{
-		piv = l_partition(array, low, high);
+		piv = l_partition(array, low, high, size);
 
 		if (piv > 0)
-			quick_recursive(array, low, piv - 1);
-		quick_recursive(array, piv + 1, high);
+			quick_recursive(array, low, piv - 1, size);
+		quick_recursive(array, piv + 1, high, size);
 	}
 }
 
@@ -68,5 +75,5 @@ void quick_sort(int *array, size_t size)
 {
 	if (array == NULL || size < 2)
 		return;
-	quick_recursive(array, 0, size - 1);
+	quick_recursive(array, 0, size - 1, size);
 }
