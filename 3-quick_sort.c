@@ -10,18 +10,20 @@
  */
 size_t l_partition(int *array, size_t low, size_t high)
 {
-	size_t i = low - 1, j;
+	size_t i = low, j;
 	int piv = array[high], temp;
 
 	for (j = low; j < high; j++)
 	{
 		if (array[j] <= piv)
 		{
-			i++;
-			temp = array[i];
-			array[i] = array[j];
-			array[j] = temp;
-			print_array(array, high + 1);
+			if (array[i] != array[j])
+			{
+				temp = array[i];
+				array[i] = array[j];
+				array[j] = temp;
+				print_array(array, high + 1);
+			}
 			i++;
 		}
 	}
@@ -43,10 +45,11 @@ size_t l_partition(int *array, size_t low, size_t high)
  */
 void quick_recursive(int *array, size_t low, size_t high)
 {
-	size_t piv = 0;
+	size_t piv;
 	if (low < high)
 	{
 		piv = l_partition(array, low, high);
+
 		if (piv > 0)
 			quick_recursive(array, low, piv - 1);
 		quick_recursive(array, piv + 1, high);
